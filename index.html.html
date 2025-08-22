@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이건희님의 포트폴리오</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .context-menu {
+            position: fixed;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 150px;
+            display: none;
+        }
+        .context-menu button {
+            width: 100%;
+            text-align: left;
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .context-menu button:hover {
+            background-color: #f3f4f6;
+        }
+        .theme-folder {
+            cursor: pointer;
+            user-select: none;
+        }
+        .theme-options {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding-left: 20px;
+        }
+        .theme-options.expanded {
+            max-height: 200px;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen font-sans">
+    <!-- Header -->
+    <header class="bg-white/10 backdrop-blur-md border-b border-white/20 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full">
+            <div class="absolute top-4 left-20 w-2 h-2 bg-white/20 rounded-full animate-pulse"></div>
+            <div class="absolute top-8 right-32 w-1 h-1 bg-white/30 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+            <div class="absolute bottom-6 right-20 w-3 h-3 bg-white/15 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 py-6 relative">
+            <div class="text-center">
+                <div class="inline-flex items-center gap-3 mb-3">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                        <span class="text-2xl">🌟</span>
+                    </div>
+                    <h1 class="text-4xl font-bold text-white">이건희님의 포트폴리오</h1>
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                        <span class="text-2xl">✨</span>
+                    </div>
+                </div>
+                <p class="text-white/90 text-lg font-medium">이건희의 특별한 소개 시작합니다</p>
+                <div class="flex justify-center gap-2 mt-3">
+                    <div class="w-2 h-2 bg-white/40 rounded-full"></div>
+                    <div class="w-2 h-2 bg-white/60 rounded-full"></div>
+                    <div class="w-2 h-2 bg-white/40 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Add Item Button -->
+        <div class="text-center mb-8">
+            <button id="addItemBtn" class="bg-white text-purple-600 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-purple-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform" style="display: none;">
+                <span class="mr-2">✨</span> 새 포트폴리오 등록하기 <span class="ml-2">🚀</span>
+            </button>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="bg-white/15 backdrop-blur-md rounded-3xl p-8 mb-8 border border-white/30 shadow-xl">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-2xl">🔍</span>
+                <h3 class="text-xl font-semibold text-white">포트폴리오 검색</h3>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative">
+                    <input type="text" id="searchInput" placeholder="제목, 설명으로 검색해보세요..." class="w-full px-5 py-3 rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/25 transition-all">
+                    <div class="absolute right-3 top-3 text-white/50">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <select id="categoryFilter" class="px-5 py-3 rounded-xl bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/25 transition-all min-w-48" style="color: white;">
+                    <option value="" style="color: black;">🏷️ 전체 카테고리</option>
+                    <option value="웹 개발" style="color: black;">💻 웹 개발</option>
+                    <option value="앱 개발" style="color: black;">📱 앱 개발</option>
+                    <option value="디자인" style="color: black;">🎨 디자인</option>
+                    <option value="마케팅" style="color: black;">📊 마케팅</option>
+                    <option value="자기계발" style="color: black;">📚 자기계발</option>
+                    <option value="대회" style="color: black;">🏆 대회</option>
+                    <option value="수상내역" style="color: black;">🥇 수상내역</option>
+                    <option value="대외활동" style="color: black;">🤝 대외활동</option>
+                    <option value="기타" style="color: black;">📋 기타</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Items Grid -->
+        <div id="itemsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-20">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-12 max-w-md mx-auto border border-white/20">
+                <div class="text-8xl mb-6">💼</div>
+                <h3 class="text-3xl font-bold text-white mb-4">아직 등록된 포트폴리오가 없어요</h3>
+                <p class="text-white/80 text-lg mb-6">첫 번째 포트폴리오를 등록해서<br>나만의 특별한 이야기를 시작해보세요!</p>
+                <div class="flex justify-center gap-2">
+                    <div class="w-3 h-3 bg-white/30 rounded-full animate-bounce"></div>
+                    <div class="w-3 h-3 bg-white/50 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                    <div class="w-3 h-3 bg-white/30 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- More Menu Button -->
+    <div class="fixed bottom-6 left-6 z-50" id="moreMenuContainer" style="display: none;">
+        <div class="relative">
+            <button id="moreMenuBtn" class="bg-white/20 text-white p-4 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-105 shadow-lg backdrop-blur-md">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            <div id="moreMenu" class="absolute bottom-full left-0 mb-2 bg-white rounded-xl shadow-xl min-w-52 z-[9999] hidden border border-gray-100">
+                <div class="py-3">
+                    <button class="w-full text-left px-5 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-3" onclick="showMyInfo()">
+                        <span class="text-lg">👤</span> 내 정보
+                    </button>
+                    <button class="w-full text-left px-5 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-3" onclick="showPortfolioList()">
+                        <span class="text-lg">📁</span> 포트폴리오 내역
+                    </button>
+                    <button class="w-full text-left px-5 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-3" onclick="showSettings()">
+                        <span class="text-lg">⚙️</span> 설정
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Mode Menu -->
+    <div class="fixed bottom-6 left-6 z-50" id="viewModeMenuContainer" style="display: none;">
+        <div class="relative">
+            <button id="viewModeMenuBtn" class="bg-white/20 text-white p-4 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-105 shadow-lg backdrop-blur-md">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+            </button>
+            <div id="viewModeMenu" class="absolute bottom-full left-0 mb-2 bg-white rounded-xl shadow-xl min-w-52 z-[9999] hidden border border-gray-100">
+                <div class="py-3">
+                    <button class="w-full text-left px-5 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-3" onclick="showPortfolioList()">
+                        <span class="text-lg">📁</span> 포트폴리오 내역
+                    </button>
+                    <button class="w-full text-left px-5 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-3" onclick="showViewModeSettings()">
+                        <span class="text-lg">🎨</span> 테마 설정
+                    </button>
+                    <button class="w-full text-left px-5 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-3" onclick="showLoginModal()">
+                        <span class="text-lg">🔑</span> 관리자 로그인
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div id="addModal" class="fixed inset-0 bg-black/50 modal hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">새 포트폴리오 등록</h2>
+            <form id="addItemForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">제목</label>
+                    <input type="text" id="itemTitle" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">설명</label>
+                    <textarea id="itemDescription" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 h-24"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">일시</label>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="dateType" value="single" checked class="mr-2" onchange="toggleDateType()">
+                                단일 날짜
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="dateType" value="range" class="mr-2" onchange="toggleDateType()">
+                                기간 설정
+                            </label>
+                        </div>
+                        <div id="singleDateDiv">
+                            <input type="date" id="itemDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div id="rangeDateDiv" class="hidden space-y-2">
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">시작일</label>
+                                <input type="date" id="itemStartDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">종료일</label>
+                                <input type="date" id="itemEndDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">카테고리 (중복 선택 가능)</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="웹 개발" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            웹 개발
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="앱 개발" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            앱 개발
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="디자인" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            디자인
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="마케팅" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            마케팅
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="자기계발" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            자기계발
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="대회" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            대회
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="수상내역" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            수상내역
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="대외활동" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            대외활동
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="category" value="기타" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            기타
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">이미지 URL (선택사항)</label>
+                    <input type="url" id="itemImage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="https://example.com/image.jpg">
+                    <p class="text-sm text-gray-500 mt-1">이미지 URL을 입력하지 않으면 랜덤 이모지가 표시됩니다</p>
+                </div>
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeAddModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        취소
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                        등록하기
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Item Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 bg-black/50 modal hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div id="modalContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button onclick="closeDetailModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Portfolio Modal -->
+    <div id="editModal" class="fixed inset-0 bg-black/50 modal hidden items-center justify-center z-[60]">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">포트폴리오 수정</h2>
+            <form id="editItemForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">제목</label>
+                    <input type="text" id="editItemTitle" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">설명</label>
+                    <textarea id="editItemDescription" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 h-24"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">일시</label>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="editDateType" value="single" checked class="mr-2" onchange="toggleEditDateType()">
+                                단일 날짜
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="editDateType" value="range" class="mr-2" onchange="toggleEditDateType()">
+                                기간 설정
+                            </label>
+                        </div>
+                        <div id="editSingleDateDiv">
+                            <input type="date" id="editItemDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div id="editRangeDateDiv" class="hidden space-y-2">
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">시작일</label>
+                                <input type="date" id="editItemStartDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">종료일</label>
+                                <input type="date" id="editItemEndDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">카테고리 (중복 선택 가능)</label>
+                    <div class="grid grid-cols-2 gap-2" id="editCategoryCheckboxes">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="웹 개발" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            웹 개발
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="앱 개발" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            앱 개발
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="디자인" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            디자인
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="마케팅" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            마케팅
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="자기계발" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            자기계발
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="대회" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            대회
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="수상내역" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            수상내역
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="대외활동" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            대외활동
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="editCategory" value="기타" class="mr-2 text-purple-600 focus:ring-purple-500">
+                            기타
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">이미지 URL (선택사항)</label>
+                    <input type="url" id="editItemImage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeEditModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        취소
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                        수정 완료
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- My Info Modal -->
+    <div id="myInfoModal" class="fixed inset-0 bg-black/50 modal hidden items-center justify-center z-[60]">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">내 정보</h2>
+            
+            <div id="profileViewMode" class="space-y-4">
+                <div class="text-center mb-6">
+                    <div class="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <span class="text-3xl" id="profileEmoji">👤</span>
+                    </div>
+                    <h3 class="text-xl font-semibold" id="profileName">이건희</h3>
+                    <p class="text-gray-600" id="profileTitle">포트폴리오 관리자</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-2">기본 정보</h4>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600 mb-1">이메일: <span id="profileEmail">gunhee@example.com</span></p>
+                        <p class="text-sm text-gray-600 mb-1">전화번호: <span id="profilePhone">010-1234-5678</span></p>
+                        <p class="text-sm text-gray-600 mb-1">가입일: 2024년 1월</p>
+                        <p class="text-sm text-gray-600">총 포트폴리오: <span id="totalPortfolios">0</span>개</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-2">자기소개</h4>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600" id="profileBio">안녕하세요! 열정적인 개발자 이건희입니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profileEditMode" class="space-y-4 hidden">
+                <div class="text-center mb-6">
+                    <div class="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <input type="text" id="editProfileEmoji" class="text-3xl text-center bg-transparent border-none outline-none w-16" maxlength="2">
+                    </div>
+                    <input type="text" id="editProfileName" class="text-xl font-semibold text-center border-b-2 border-gray-300 focus:border-purple-500 outline-none">
+                    <input type="text" id="editProfileTitle" class="text-gray-600 text-center border-b-2 border-gray-300 focus:border-purple-500 outline-none mt-2 w-full">
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-2">기본 정보</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+                            <input type="email" id="editProfileEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">전화번호</label>
+                            <input type="tel" id="editProfilePhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-2">자기소개</h4>
+                    <textarea id="editProfileBio" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 h-24"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-6">
+                <button onclick="closeMyInfoModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    닫기
+                </button>
+                <button id="editProfileBtn" onclick="toggleProfileEdit()" class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                    프로필 수정
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio List Modal -->
+    <div id="portfolioListModal" class="fixed inset-0 bg-black/50 modal hidden items-center justify-center z-[60]">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">포트폴리오 내역</h2>
+            <div class="mb-4 flex justify-between items-center">
+                <div class="flex gap-2">
+                    <button id="sortRecentBtn" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm" onclick="sortPortfolios('recent')">
+                        📅 최근 순
+                    </button>
+                    <button id="sortDateBtn" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm" onclick="sortPortfolios('date')">
+                        🗓️ 날짜 순
+                    </button>
+                </div>
+            </div>
+            <div id="portfolioListContent" class="space-y-3">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button onclick="closePortfolioListModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/50 modal hidden items-center justify-center z-[60]">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">설정</h2>
+            <div class="space-y-4" id="settingsContent">
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-3">테마 설정</h4>
+                    <div class="space-y-2">
+                        <div class="theme-folder" onclick="toggleThemeFolder('gradient')">
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span>🌈 그라데이션 테마</span>
+                                <span id="gradientArrow">▶</span>
+                            </div>
+                        </div>
+                        <div id="gradientThemes" class="theme-options">
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="purple" checked class="mr-2" onchange="changeTheme('purple')">
+                                보라색 그라데이션 (현재)
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="blue" class="mr-2" onchange="changeTheme('blue')">
+                                파란색 그라데이션
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="green" class="mr-2" onchange="changeTheme('green')">
+                                초록색 그라데이션
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="orange" class="mr-2" onchange="changeTheme('orange')">
+                                오렌지 그라데이션
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="pink" class="mr-2" onchange="changeTheme('pink')">
+                                핑크 그라데이션
+                            </label>
+                        </div>
+                        <div class="theme-folder" onclick="toggleThemeFolder('solid')">
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span>🎨 단색 테마</span>
+                                <span id="solidArrow">▶</span>
+                            </div>
+                        </div>
+                        <div id="solidThemes" class="theme-options">
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="dark" class="mr-2" onchange="changeTheme('dark')">
+                                다크 모드
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="light" class="mr-2" onchange="changeTheme('light')">
+                                라이트 모드
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="navy" class="mr-2" onchange="changeTheme('navy')">
+                                네이비 블루
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-3">알림 설정</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center justify-between">
+                            <span>새 포트폴리오 알림</span>
+                            <input type="checkbox" id="portfolioNotification" checked class="toggle">
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-3">데이터 관리</h4>
+                    <button onclick="deleteAllPortfolios()" class="w-full bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 transition-colors">
+                        모든 포트폴리오 삭제
+                    </button>
+                </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button onclick="closeSettingsModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    닫기
+                </button>
+                <button onclick="saveSettings()" class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <button onclick="editPortfolio()">✏️ 수정</button>
+        <button onclick="deletePortfolioFromContext()" class="text-red-600">🗑️ 삭제</button>
+        <button onclick="duplicatePortfolio()">📋 복제</button>
+        <button onclick="hideContextMenu()">❌ 취소</button>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black/50 modal flex items-center justify-center z-[100]">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <span class="text-3xl">🔐</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">포트폴리오 관리</h2>
+                <p class="text-gray-600 mt-2">관리자 로그인이 필요합니다</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">사용자명</label>
+                    <input type="text" id="loginUsername" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="사용자명을 입력하세요">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">비밀번호</label>
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="비밀번호를 입력하세요">
+                </div>
+                <div class="flex gap-4">
+                    <button type="button" onclick="enterViewMode()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        👀 구경하기
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                        🔑 로그인
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="fixed top-4 right-4 z-[200] hidden">
+        <div class="bg-white rounded-lg shadow-lg p-4 max-w-sm">
+            <div class="flex items-center">
+                <div id="notificationIcon" class="mr-3 text-2xl"></div>
+                <div>
+                    <p id="notificationMessage" class="text-gray-800 font-medium"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication system
+        let isLoggedIn = false;
+        let isViewMode = false;
+        
+        // Demo credentials
+        const DEMO_USERNAME = '이건희';
+        const DEMO_PASSWORD = 'geonhee';
+        
+        // Portfolio data
+        let items = [];
+        let nextId = 0;
+        let currentContextItemId = null;
+        let currentEditingItemId = null;
+        let isEditingProfile = false;
+
+        // User profile data
+        let userProfile = {
+            emoji: '👤',
+            name: '이건희',
+            title: '포트폴리오 관리자',
+            email: 'gunhee@example.com',
+            phone: '010-1234-5678',
+            bio: '안녕하세요! 열정적인 개발자 이건희입니다.'
+        };
+
+        // Settings data
+        let settings = {
+            theme: 'purple',
+            notifications: {
+                portfolio: true
+            }
+        };
+
+        // Load data from localStorage on page load
+        function loadData() {
+            try {
+                const savedItems = localStorage.getItem('portfolioItems');
+                const savedNextId = localStorage.getItem('nextPortfolioId');
+                const savedProfile = localStorage.getItem('userProfile');
+                const savedSettings = localStorage.getItem('appSettings');
+                
+                if (savedItems) {
+                    items = JSON.parse(savedItems);
+                }
+                
+                if (savedNextId) {
+                    nextId = parseInt(savedNextId);
+                }
+                
+                if (savedProfile) {
+                    userProfile = JSON.parse(savedProfile);
+                }
+                
+                if (savedSettings) {
+                    settings = JSON.parse(savedSettings);
+                    changeTheme(settings.theme);
+                }
+                
+                console.log('데이터 로드 완료:', { items: items.length });
+            } catch (error) {
+                console.error('데이터 로드 중 오류:', error);
+            }
+        }
+        
+        // Save data to localStorage
+        function saveData() {
+            try {
+                localStorage.setItem('portfolioItems', JSON.stringify(items));
+                localStorage.setItem('nextPortfolioId', nextId.toString());
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                localStorage.setItem('appSettings', JSON.stringify(settings));
+                console.log('데이터 저장 완료');
+            } catch (error) {
+                console.error('데이터 저장 중 오류:', error);
+                showNotification('데이터 저장에 실패했습니다.', 'error');
+            }
+        }
+
+        // DOM Elements
+        const addItemBtn = document.getElementById('addItemBtn');
+        const addModal = document.getElementById('addModal');
+        const detailModal = document.getElementById('detailModal');
+        const addItemForm = document.getElementById('addItemForm');
+        const editItemForm = document.getElementById('editItemForm');
+        const itemsGrid = document.getElementById('itemsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const moreMenuBtn = document.getElementById('moreMenuBtn');
+        const moreMenu = document.getElementById('moreMenu');
+        const viewModeMenuBtn = document.getElementById('viewModeMenuBtn');
+        const viewModeMenu = document.getElementById('viewModeMenu');
+
+        // Event Listeners
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        addItemBtn.addEventListener('click', openAddModal);
+        addItemForm.addEventListener('submit', addItem);
+        editItemForm.addEventListener('submit', updateItem);
+        searchInput.addEventListener('input', filterItems);
+        categoryFilter.addEventListener('change', filterItems);
+        
+        if (moreMenuBtn) {
+            moreMenuBtn.addEventListener('click', toggleMoreMenu);
+        }
+        
+        if (viewModeMenuBtn) {
+            viewModeMenuBtn.addEventListener('click', toggleViewModeMenu);
+        }
+
+        // Context menu event listeners
+        document.addEventListener('contextmenu', (e) => {
+            if (!isLoggedIn) return;
+            
+            const portfolioCard = e.target.closest('[data-portfolio-id]');
+            if (portfolioCard) {
+                e.preventDefault();
+                currentContextItemId = parseInt(portfolioCard.dataset.portfolioId);
+                showContextMenu(e.pageX, e.pageY);
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('contextMenu').contains(e.target)) {
+                hideContextMenu();
+            }
+            
+            if (moreMenu && !moreMenuBtn.contains(e.target) && !moreMenu.contains(e.target)) {
+                moreMenu.classList.add('hidden');
+            }
+            
+            if (viewModeMenu && !viewModeMenuBtn.contains(e.target) && !viewModeMenu.contains(e.target)) {
+                viewModeMenu.classList.add('hidden');
+            }
+        });
+
+        // Authentication Functions
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
+                isLoggedIn = true;
+                isViewMode = false;
+                document.getElementById('loginModal').classList.add('hidden');
+                updateUIForLoggedInUser();
+                showNotification('관리자로 로그인되었습니다! 포트폴리오를 자유롭게 관리하세요.', 'success');
+            } else {
+                showNotification('사용자명 또는 비밀번호가 올바르지 않습니다.', 'error');
+                document.getElementById('loginPassword').value = '';
+            }
+        }
+        
+        function enterViewMode() {
+            isViewMode = true;
+            isLoggedIn = false;
+            document.getElementById('loginModal').classList.add('hidden');
+            updateUIForViewMode();
+            showNotification('구경 모드로 입장했습니다. 포트폴리오를 둘러보세요!', 'info');
+        }
+        
+        function updateUIForLoggedInUser() {
+            document.getElementById('addItemBtn').style.display = 'block';
+            document.getElementById('moreMenuContainer').style.display = 'block';
+            document.getElementById('viewModeMenuContainer').style.display = 'none';
+            
+            const header = document.querySelector('header p');
+            header.innerHTML = '🔑 관리자 모드 - 이건희의 특별한 소개 시작합니다';
+            
+            // 기존 버튼 제거
+            const existingBtn = header.querySelector('button');
+            if (existingBtn) {
+                existingBtn.remove();
+            }
+            
+            const logoutBtn = document.createElement('button');
+            logoutBtn.className = 'ml-4 text-sm bg-white/20 px-3 py-1 rounded-full hover:bg-white/30 transition-colors';
+            logoutBtn.textContent = '로그아웃';
+            logoutBtn.addEventListener('click', logout);
+            header.appendChild(logoutBtn);
+        }
+        
+        function updateUIForViewMode() {
+            document.getElementById('addItemBtn').style.display = 'none';
+            document.getElementById('moreMenuContainer').style.display = 'none';
+            document.getElementById('viewModeMenuContainer').style.display = 'block';
+            
+            const header = document.querySelector('header p');
+            header.innerHTML = '👀 구경 모드 - 이건희의 특별한 소개를 둘러보세요';
+            
+            // 기존 버튼 제거
+            const existingBtn = header.querySelector('button');
+            if (existingBtn) {
+                existingBtn.remove();
+            }
+            
+            const loginBtn = document.createElement('button');
+            loginBtn.className = 'ml-4 text-sm bg-white/20 px-3 py-1 rounded-full hover:bg-white/30 transition-colors';
+            loginBtn.textContent = '관리자 로그인';
+            loginBtn.addEventListener('click', showLoginModal);
+            header.appendChild(loginBtn);
+        }
+        
+        function logout() {
+            if (confirm('정말 로그아웃하시겠습니까?')) {
+                isLoggedIn = false;
+                isViewMode = false;
+                
+                // UI 초기화
+                document.getElementById('addItemBtn').style.display = 'none';
+                document.getElementById('moreMenuContainer').style.display = 'none';
+                document.getElementById('viewModeMenuContainer').style.display = 'none';
+                
+                const header = document.querySelector('header p');
+                header.innerHTML = '이건희의 특별한 소개 시작합니다';
+                
+                showLoginModal();
+                showNotification('로그아웃되었습니다.', 'info');
+            }
+        }
+        
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('flex');
+            document.getElementById('loginForm').reset();
+        }
+
+        // Portfolio Functions
+        function openAddModal() {
+            addModal.classList.remove('hidden');
+            addModal.classList.add('flex');
+        }
+
+        function closeAddModal() {
+            addModal.classList.add('hidden');
+            addModal.classList.remove('flex');
+            addItemForm.reset();
+        }
+
+        function toggleDateType() {
+            const singleDiv = document.getElementById('singleDateDiv');
+            const rangeDiv = document.getElementById('rangeDateDiv');
+            const dateType = document.querySelector('input[name="dateType"]:checked').value;
+            
+            if (dateType === 'single') {
+                singleDiv.classList.remove('hidden');
+                rangeDiv.classList.add('hidden');
+                document.getElementById('itemDate').required = true;
+                document.getElementById('itemStartDate').required = false;
+                document.getElementById('itemEndDate').required = false;
+            } else {
+                singleDiv.classList.add('hidden');
+                rangeDiv.classList.remove('hidden');
+                document.getElementById('itemDate').required = false;
+                document.getElementById('itemStartDate').required = true;
+                document.getElementById('itemEndDate').required = true;
+            }
+        }
+
+        function toggleEditDateType() {
+            const singleDiv = document.getElementById('editSingleDateDiv');
+            const rangeDiv = document.getElementById('editRangeDateDiv');
+            const dateType = document.querySelector('input[name="editDateType"]:checked').value;
+            
+            if (dateType === 'single') {
+                singleDiv.classList.remove('hidden');
+                rangeDiv.classList.add('hidden');
+                document.getElementById('editItemDate').required = true;
+                document.getElementById('editItemStartDate').required = false;
+                document.getElementById('editItemEndDate').required = false;
+            } else {
+                singleDiv.classList.add('hidden');
+                rangeDiv.classList.remove('hidden');
+                document.getElementById('editItemDate').required = false;
+                document.getElementById('editItemStartDate').required = true;
+                document.getElementById('editItemEndDate').required = true;
+            }
+        }
+
+        function addItem(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('itemTitle').value;
+            const description = document.getElementById('itemDescription').value;
+            const imageUrl = document.getElementById('itemImage').value;
+            
+            const dateType = document.querySelector('input[name="dateType"]:checked').value;
+            let dateInfo;
+            if (dateType === 'single') {
+                dateInfo = {
+                    type: 'single',
+                    date: document.getElementById('itemDate').value
+                };
+            } else {
+                dateInfo = {
+                    type: 'range',
+                    startDate: document.getElementById('itemStartDate').value,
+                    endDate: document.getElementById('itemEndDate').value
+                };
+            }
+            
+            const selectedCategories = [];
+            const categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+            categoryCheckboxes.forEach(checkbox => {
+                selectedCategories.push(checkbox.value);
+            });
+            
+            if (selectedCategories.length === 0) {
+                alert('최소 하나의 카테고리를 선택해주세요.');
+                return;
+            }
+
+            const emojis = ['💻', '📱', '🎨', '📊', '🚀', '⚡', '🔧', '📈', '💡', '🎯'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+            const newItem = {
+                id: nextId++,
+                title,
+                description,
+                dateInfo,
+                categories: selectedCategories,
+                image: imageUrl || randomEmoji,
+                status: "완료"
+            };
+
+            items.push(newItem);
+            saveData();
+            renderItems();
+            closeAddModal();
+            
+            if (settings.notifications.portfolio) {
+                showNotification(`새 포트폴리오 "${title}"이 등록되었습니다!`, 'success');
+            }
+        }
+
+        function openModal(itemId) {
+            const item = items.find(i => i.id === itemId);
+            if (!item) return;
+
+            const modalContent = document.getElementById('modalContent');
+            
+            let dateDisplay;
+            if (item.dateInfo) {
+                if (item.dateInfo.type === 'single') {
+                    dateDisplay = new Date(item.dateInfo.date).toLocaleDateString('ko-KR');
+                } else {
+                    const startDate = new Date(item.dateInfo.startDate).toLocaleDateString('ko-KR');
+                    const endDate = new Date(item.dateInfo.endDate).toLocaleDateString('ko-KR');
+                    dateDisplay = `${startDate} ~ ${endDate}`;
+                }
+            } else {
+                dateDisplay = item.date ? new Date(item.date).toLocaleDateString('ko-KR') : '';
+            }
+
+            modalContent.innerHTML = `
+                <div class="text-center mb-6">
+                    <div class="w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+                        ${item.image && item.image.startsWith('http') ? 
+                            `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover rounded-2xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                             <span class="text-6xl hidden">💼</span>` :
+                            `<span class="text-6xl">${item.image || '💼'}</span>`
+                        }
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800">${item.title}</h2>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-700 mb-2">프로젝트 설명</h3>
+                        <p class="text-gray-600">${item.description}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700 mb-2">일시</h3>
+                        <p class="text-gray-600">${dateDisplay}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700 mb-2">카테고리</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.categories ? item.categories.map(cat => `<span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">${cat}</span>`).join('') : ''}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700 mb-2">상태</h3>
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">${item.status || '완료'}</span>
+                    </div>
+                </div>
+            `;
+            
+            detailModal.classList.remove('hidden');
+            detailModal.classList.add('flex');
+        }
+
+        function closeDetailModal() {
+            detailModal.classList.add('hidden');
+            detailModal.classList.remove('flex');
+        }
+
+        function renderItems(itemsToRender = items) {
+            if (itemsToRender.length === 0) {
+                itemsGrid.innerHTML = '';
+                document.getElementById('emptyState').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('emptyState').classList.add('hidden');
+            
+            itemsGrid.innerHTML = itemsToRender.map(item => {
+                let dateDisplay;
+                if (item.dateInfo) {
+                    if (item.dateInfo.type === 'single') {
+                        dateDisplay = new Date(item.dateInfo.date).toLocaleDateString('ko-KR');
+                    } else {
+                        const startDate = new Date(item.dateInfo.startDate).toLocaleDateString('ko-KR');
+                        const endDate = new Date(item.dateInfo.endDate).toLocaleDateString('ko-KR');
+                        dateDisplay = `${startDate} ~ ${endDate}`;
+                    }
+                } else {
+                    dateDisplay = item.date ? new Date(item.date).toLocaleDateString('ko-KR') : '';
+                }
+
+                return `
+                    <div class="bg-white/15 backdrop-blur-md rounded-2xl p-6 border border-white/20 card-hover cursor-pointer" 
+                         data-portfolio-id="${item.id}" onclick="openModal(${item.id})">
+                        <div class="w-full h-48 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl mb-4 flex items-center justify-center">
+                            ${item.image && item.image.startsWith('http') ? 
+                                `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                 <span class="text-6xl hidden">💼</span>` :
+                                `<span class="text-6xl">${item.image || '💼'}</span>`
+                            }
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">${item.title}</h3>
+                        <p class="text-white/80 mb-2">${item.description.length > 50 ? item.description.substring(0, 50) + '...' : item.description}</p>
+                        <p class="text-white/60 text-sm mb-3">${dateDisplay}</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            ${item.categories ? item.categories.map(cat => `<span class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs">${cat}</span>`).join('') : ''}
+                        </div>
+                        <div class="flex justify-end">
+                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">${item.status || '완료'}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterItems() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedCategory = categoryFilter.value;
+
+            const filteredItems = items.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(searchTerm) || 
+                                    item.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !selectedCategory || (item.categories && item.categories.includes(selectedCategory));
+                
+                return matchesSearch && matchesCategory;
+            });
+
+            renderItems(filteredItems);
+        }
+
+        // Menu Functions
+        function toggleMoreMenu() {
+            moreMenu.classList.toggle('hidden');
+        }
+
+        function toggleViewModeMenu() {
+            viewModeMenu.classList.toggle('hidden');
+        }
+
+        // Profile Functions
+        function showMyInfo() {
+            updateProfileDisplay();
+            document.getElementById('totalPortfolios').textContent = items.length;
+            document.getElementById('myInfoModal').classList.remove('hidden');
+            document.getElementById('myInfoModal').classList.add('flex');
+            moreMenu.classList.add('hidden');
+        }
+
+        function closeMyInfoModal() {
+            document.getElementById('myInfoModal').classList.add('hidden');
+            document.getElementById('myInfoModal').classList.remove('flex');
+            if (isEditingProfile) {
+                toggleProfileEdit();
+            }
+        }
+
+        function updateProfileDisplay() {
+            document.getElementById('profileEmoji').textContent = userProfile.emoji;
+            document.getElementById('profileName').textContent = userProfile.name;
+            document.getElementById('profileTitle').textContent = userProfile.title;
+            document.getElementById('profileEmail').textContent = userProfile.email;
+            document.getElementById('profilePhone').textContent = userProfile.phone;
+            document.getElementById('profileBio').textContent = userProfile.bio;
+        }
+
+        function toggleProfileEdit() {
+            const viewMode = document.getElementById('profileViewMode');
+            const editMode = document.getElementById('profileEditMode');
+            const editBtn = document.getElementById('editProfileBtn');
+
+            if (!isEditingProfile) {
+                viewMode.classList.add('hidden');
+                editMode.classList.remove('hidden');
+                editBtn.textContent = '저장';
+                
+                document.getElementById('editProfileEmoji').value = userProfile.emoji;
+                document.getElementById('editProfileName').value = userProfile.name;
+                document.getElementById('editProfileTitle').value = userProfile.title;
+                document.getElementById('editProfileEmail').value = userProfile.email;
+                document.getElementById('editProfilePhone').value = userProfile.phone;
+                document.getElementById('editProfileBio').value = userProfile.bio;
+                
+                isEditingProfile = true;
+            } else {
+                userProfile.emoji = document.getElementById('editProfileEmoji').value || '👤';
+                userProfile.name = document.getElementById('editProfileName').value || '이건희';
+                userProfile.title = document.getElementById('editProfileTitle').value || '포트폴리오 관리자';
+                userProfile.email = document.getElementById('editProfileEmail').value || 'gunhee@example.com';
+                userProfile.phone = document.getElementById('editProfilePhone').value || '010-1234-5678';
+                userProfile.bio = document.getElementById('editProfileBio').value || '안녕하세요! 열정적인 개발자 이건희입니다.';
+                
+                updateProfileDisplay();
+                saveData();
+                
+                viewMode.classList.remove('hidden');
+                editMode.classList.add('hidden');
+                editBtn.textContent = '프로필 수정';
+                
+                isEditingProfile = false;
+                
+                showNotification('프로필이 성공적으로 업데이트되었습니다!', 'success');
+            }
+        }
+
+        // Portfolio List Functions
+        function showPortfolioList() {
+            renderPortfolioList();
+            document.getElementById('portfolioListModal').classList.remove('hidden');
+            document.getElementById('portfolioListModal').classList.add('flex');
+            if (moreMenu) moreMenu.classList.add('hidden');
+            if (viewModeMenu) viewModeMenu.classList.add('hidden');
+        }
+
+        function renderPortfolioList(sortOrder = 'recent') {
+            const portfolioListContent = document.getElementById('portfolioListContent');
+            
+            if (items.length === 0) {
+                portfolioListContent.innerHTML = '<p class="text-gray-500 text-center py-8">등록된 포트폴리오가 없습니다.</p>';
+                return;
+            }
+
+            const sortedItems = [...items].sort((a, b) => {
+                const dateA = getItemDate(a);
+                const dateB = getItemDate(b);
+                
+                if (sortOrder === 'recent') {
+                    return new Date(dateB) - new Date(dateA);
+                } else {
+                    return new Date(dateA) - new Date(dateB);
+                }
+            });
+
+            const groupedItems = {};
+            sortedItems.forEach(item => {
+                const dateKey = getItemDate(item);
+                const formattedDate = new Date(dateKey).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'short'
+                });
+                
+                if (!groupedItems[formattedDate]) {
+                    groupedItems[formattedDate] = [];
+                }
+                groupedItems[formattedDate].push(item);
+            });
+
+            let html = '';
+            Object.keys(groupedItems).forEach(dateGroup => {
+                html += `
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                            <h3 class="text-lg font-semibold text-gray-800">${dateGroup}</h3>
+                            <div class="flex-1 h-px bg-gray-200 ml-4"></div>
+                        </div>
+                        <div class="space-y-2 ml-6">
+                            ${groupedItems[dateGroup].map(item => `
+                                <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-purple-300 hover:bg-gray-100 transition-colors">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800 mb-1">${item.title}</h4>
+                                            <p class="text-sm text-gray-600 mb-2">${item.description.length > 80 ? item.description.substring(0, 80) + '...' : item.description}</p>
+                                            <div class="flex flex-wrap gap-1">
+                                                ${item.categories ? item.categories.map(cat => `<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs">${cat}</span>`).join('') : ''}
+                                            </div>
+                                        </div>
+                                        <div class="flex gap-2 ml-4">
+                                            <button onclick="openModal(${item.id}); closePortfolioListModal();" class="text-purple-600 hover:text-purple-800 text-sm font-medium">보기</button>
+                                            ${isLoggedIn ? `<button onclick="deletePortfolio(${item.id})" class="text-red-600 hover:text-red-800 text-sm font-medium">삭제</button>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            portfolioListContent.innerHTML = html;
+        }
+
+        function getItemDate(item) {
+            if (item.dateInfo) {
+                if (item.dateInfo.type === 'single') {
+                    return item.dateInfo.date;
+                } else {
+                    return item.dateInfo.startDate;
+                }
+            } else {
+                return item.date || new Date().toISOString().split('T')[0];
+            }
+        }
+
+        function sortPortfolios(order) {
+            document.getElementById('sortRecentBtn').className = order === 'recent' ? 
+                'bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm' :
+                'bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm';
+            
+            document.getElementById('sortDateBtn').className = order === 'date' ? 
+                'bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm' :
+                'bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm';
+            
+            renderPortfolioList(order);
+        }
+
+        function closePortfolioListModal() {
+            document.getElementById('portfolioListModal').classList.add('hidden');
+            document.getElementById('portfolioListModal').classList.remove('flex');
+        }
+
+        function deletePortfolio(itemId) {
+            if (confirm('정말로 이 포트폴리오를 삭제하시겠습니까?')) {
+                items = items.filter(item => item.id !== itemId);
+                saveData();
+                renderItems();
+                renderPortfolioList();
+                showNotification('포트폴리오가 삭제되었습니다.', 'warning');
+            }
+        }
+
+        // Settings Functions
+        function showSettings() {
+            document.querySelector(`input[name="theme"][value="${settings.theme}"]`).checked = true;
+            document.getElementById('portfolioNotification').checked = settings.notifications.portfolio;
+            
+            document.getElementById('settingsModal').classList.remove('hidden');
+            document.getElementById('settingsModal').classList.add('flex');
+            moreMenu.classList.add('hidden');
+        }
+
+        function showViewModeSettings() {
+            const settingsContent = document.getElementById('settingsContent');
+            settingsContent.innerHTML = `
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-3">테마 설정</h4>
+                    <div class="space-y-2">
+                        <div class="theme-folder" onclick="toggleThemeFolder('gradient')">
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span>🌈 그라데이션 테마</span>
+                                <span id="gradientArrow">▶</span>
+                            </div>
+                        </div>
+                        <div id="gradientThemes" class="theme-options">
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="purple" checked class="mr-2" onchange="changeTheme('purple')">
+                                보라색 그라데이션 (현재)
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="blue" class="mr-2" onchange="changeTheme('blue')">
+                                파란색 그라데이션
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="green" class="mr-2" onchange="changeTheme('green')">
+                                초록색 그라데이션
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="orange" class="mr-2" onchange="changeTheme('orange')">
+                                오렌지 그라데이션
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="pink" class="mr-2" onchange="changeTheme('pink')">
+                                핑크 그라데이션
+                            </label>
+                        </div>
+                        <div class="theme-folder" onclick="toggleThemeFolder('solid')">
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <span>🎨 단색 테마</span>
+                                <span id="solidArrow">▶</span>
+                            </div>
+                        </div>
+                        <div id="solidThemes" class="theme-options">
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="dark" class="mr-2" onchange="changeTheme('dark')">
+                                다크 모드
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="light" class="mr-2" onchange="changeTheme('light')">
+                                라이트 모드
+                            </label>
+                            <label class="flex items-center py-1">
+                                <input type="radio" name="theme" value="navy" class="mr-2" onchange="changeTheme('navy')">
+                                네이비 블루
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-blue-700">
+                        🔒 구경 모드에서는 테마 변경만 가능합니다.<br>
+                        모든 설정을 이용하려면 관리자 로그인이 필요합니다.
+                    </p>
+                </div>
+            `;
+            
+            document.querySelector(`input[name="theme"][value="${settings.theme}"]`).checked = true;
+            
+            document.getElementById('settingsModal').classList.remove('hidden');
+            document.getElementById('settingsModal').classList.add('flex');
+            viewModeMenu.classList.add('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+            document.getElementById('settingsModal').classList.remove('flex');
+        }
+
+        function toggleThemeFolder(folderType) {
+            const folder = document.getElementById(folderType + 'Themes');
+            const arrow = document.getElementById(folderType + 'Arrow');
+            
+            if (folder && arrow) {
+                folder.classList.toggle('expanded');
+                arrow.textContent = folder.classList.contains('expanded') ? '▼' : '▶';
+            }
+        }
+
+        function changeTheme(theme) {
+            settings.theme = theme;
+            saveData();
+            
+            const body = document.body;
+            
+            switch(theme) {
+                case 'dark':
+                    body.style.background = '#1a1a1a';
+                    body.style.color = '#ffffff';
+                    break;
+                case 'light':
+                    body.style.background = '#ffffff';
+                    body.style.color = '#000000';
+                    break;
+                case 'blue':
+                    body.style.background = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
+                    body.style.color = '#ffffff';
+                    break;
+                case 'green':
+                    body.style.background = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+                    body.style.color = '#ffffff';
+                    break;
+                case 'orange':
+                    body.style.background = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)';
+                    body.style.color = '#ffffff';
+                    break;
+                case 'pink':
+                    body.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)';
+                    body.style.color = '#ffffff';
+                    break;
+                case 'navy':
+                    body.style.background = '#2c3e50';
+                    body.style.color = '#ffffff';
+                    break;
+                default:
+                    body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                    body.style.color = '#ffffff';
+            }
+            
+            showNotification(`테마가 변경되었습니다!`, 'success');
+        }
+
+        function saveSettings() {
+            settings.notifications.portfolio = document.getElementById('portfolioNotification').checked;
+            saveData();
+            showNotification('설정이 저장되었습니다!', 'success');
+        }
+
+        function deleteAllPortfolios() {
+            if (confirm('정말로 모든 포트폴리오를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                items = [];
+                nextId = 0;
+                saveData();
+                renderItems();
+                showNotification('모든 포트폴리오가 삭제되었습니다.', 'warning');
+                closeSettingsModal();
+            }
+        }
+
+        // Context Menu Functions
+        function showContextMenu(x, y) {
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.left = x + 'px';
+            contextMenu.style.top = y + 'px';
+            contextMenu.style.display = 'block';
+        }
+
+        function hideContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+
+        function editPortfolio() {
+            const item = items.find(i => i.id === currentContextItemId);
+            if (!item) return;
+
+            currentEditingItemId = currentContextItemId;
+            
+            document.getElementById('editItemTitle').value = item.title;
+            document.getElementById('editItemDescription').value = item.description;
+            document.getElementById('editItemImage').value = item.image && item.image.startsWith('http') ? item.image : '';
+            
+            if (item.dateInfo) {
+                if (item.dateInfo.type === 'single') {
+                    document.querySelector('input[name="editDateType"][value="single"]').checked = true;
+                    document.getElementById('editItemDate').value = item.dateInfo.date;
+                    toggleEditDateType();
+                } else {
+                    document.querySelector('input[name="editDateType"][value="range"]').checked = true;
+                    document.getElementById('editItemStartDate').value = item.dateInfo.startDate;
+                    document.getElementById('editItemEndDate').value = item.dateInfo.endDate;
+                    toggleEditDateType();
+                }
+            } else {
+                document.querySelector('input[name="editDateType"][value="single"]').checked = true;
+                document.getElementById('editItemDate').value = item.date || '';
+                toggleEditDateType();
+            }
+            
+            const editCategoryCheckboxes = document.querySelectorAll('input[name="editCategory"]');
+            editCategoryCheckboxes.forEach(checkbox => {
+                checkbox.checked = item.categories && item.categories.includes(checkbox.value);
+            });
+            
+            document.getElementById('editModal').classList.remove('hidden');
+            document.getElementById('editModal').classList.add('flex');
+            hideContextMenu();
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            document.getElementById('editModal').classList.remove('flex');
+            currentEditingItemId = null;
+        }
+
+        function updateItem(e) {
+            e.preventDefault();
+            
+            const itemIndex = items.findIndex(i => i.id === currentEditingItemId);
+            if (itemIndex === -1) return;
+            
+            const title = document.getElementById('editItemTitle').value;
+            const description = document.getElementById('editItemDescription').value;
+            const imageUrl = document.getElementById('editItemImage').value;
+            
+            const dateType = document.querySelector('input[name="editDateType"]:checked').value;
+            let dateInfo;
+            if (dateType === 'single') {
+                dateInfo = {
+                    type: 'single',
+                    date: document.getElementById('editItemDate').value
+                };
+            } else {
+                dateInfo = {
+                    type: 'range',
+                    startDate: document.getElementById('editItemStartDate').value,
+                    endDate: document.getElementById('editItemEndDate').value
+                };
+            }
+            
+            const selectedCategories = [];
+            const categoryCheckboxes = document.querySelectorAll('input[name="editCategory"]:checked');
+            categoryCheckboxes.forEach(checkbox => {
+                selectedCategories.push(checkbox.value);
+            });
+            
+            if (selectedCategories.length === 0) {
+                alert('최소 하나의 카테고리를 선택해주세요.');
+                return;
+            }
+
+            items[itemIndex] = {
+                ...items[itemIndex],
+                title,
+                description,
+                dateInfo,
+                categories: selectedCategories,
+                image: imageUrl || items[itemIndex].image
+            };
+
+            saveData();
+            renderItems();
+            closeEditModal();
+            showNotification('포트폴리오가 성공적으로 수정되었습니다!', 'success');
+        }
+
+        function deletePortfolioFromContext() {
+            if (confirm('정말로 이 포트폴리오를 삭제하시겠습니까?')) {
+                items = items.filter(item => item.id !== currentContextItemId);
+                saveData();
+                renderItems();
+                hideContextMenu();
+                showNotification('포트폴리오가 삭제되었습니다.', 'warning');
+            }
+        }
+
+        function duplicatePortfolio() {
+            const item = items.find(i => i.id === currentContextItemId);
+            if (!item) return;
+
+            const duplicatedItem = {
+                ...item,
+                id: nextId++,
+                title: item.title + ' (복사본)'
+            };
+
+            items.push(duplicatedItem);
+            saveData();
+            renderItems();
+            hideContextMenu();
+            showNotification('포트폴리오가 복제되었습니다!', 'success');
+        }
+
+        // Notification Function
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notificationIcon');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            icon.textContent = icons[type] || icons.info;
+            messageEl.textContent = message;
+            
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            renderItems();
+            
+            // 페이지 로드 시 로그인 모달 표시
+            showLoginModal();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972eae06e3eaea12',t:'MTc1NTgyNzAxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
